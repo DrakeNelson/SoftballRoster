@@ -1,4 +1,4 @@
-package com.drakenelson.softballroster;
+package com.drakenelson.softballroster.Database;
 
 /**
  * Created by user on 4/24/2017.

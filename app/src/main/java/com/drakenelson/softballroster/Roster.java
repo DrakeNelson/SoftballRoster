@@ -2,7 +2,12 @@ package com.drakenelson.softballroster;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.drakenelson.softballroster.Database.CrimeBaseHelper;
+import com.drakenelson.softballroster.Database.CrimeCursorWrapper;
+import com.drakenelson.softballroster.Database.CrimeSchema.CrimeTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +19,6 @@ import java.util.UUID;
 
 public class Roster {
     private static Roster sCrimeLab;
-
-
-    private List<Player> mCrimes;
 
     //DATABASE VARIABLES
     private Context mContext;
@@ -30,14 +32,7 @@ public class Roster {
         mContext = context.getApplicationContext();
         mDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
 
-        mCrimes = new ArrayList<>();
-//        for (int i = 0; i < 14; i++) {
-//            Player crime = new Player();
-//            crime.setNumber(i);
-//            crime.setFirstName("Asdf");
-//            crime.setLastName("Hjkl");
-//            mCrimes.add(crime);
-//        }
+
     }
 
     public static Roster get(Context context) {
@@ -47,27 +42,36 @@ public class Roster {
         return sCrimeLab;
     }
 
-    public Player getCrime(UUID uuid) {
-        for (Player crime : mCrimes) {
-            if (crime.getId().equals(uuid)) {
-                return crime;
+    public Player getCrime(UUID id) {
+        CrimeCursorWrapper cursor = queryCrimes(
+                CrimeTable.Cols.UUID + " = ?",
+                new String[] { id.toString() }
+        );
+
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
             }
+
+            cursor.moveToFirst();
+            return cursor.getPlayer();
+        } finally {
+            cursor.close();
         }
-        return null;
     }
 
     private static ContentValues getContentValues(Player crime) {
         ContentValues values = new ContentValues();
-        values.put(CrimeSchema.CrimeTable.Cols.UUID, crime.getId().toString());
-        values.put(CrimeSchema.CrimeTable.Cols.FIRST_NAME, crime.getFirstName());
-        values.put(CrimeSchema.CrimeTable.Cols.LAST_NAME, crime.getLastName());
-        values.put(CrimeSchema.CrimeTable.Cols.NUMBER, crime.getNumber().toString());
-        values.put(CrimeSchema.CrimeTable.Cols.POSITIONS, crime.getPositions());
-        values.put(CrimeSchema.CrimeTable.Cols.LAST_UPDATE, crime.getLastUpdate().toString());
-        values.put(CrimeSchema.CrimeTable.Cols.ISCATCHER, crime.isCatcher()?1:0);
-        values.put(CrimeSchema.CrimeTable.Cols.ISPITCHER, crime.isPitcher()?1:0);
-        values.put(CrimeSchema.CrimeTable.Cols.ISINFIELD, crime.isInfield()?1:0);
-        values.put(CrimeSchema.CrimeTable.Cols.ISOUTFIELD, crime.isOutfield()?1:0);
+        values.put(CrimeTable.Cols.UUID, crime.getId().toString());
+        values.put(CrimeTable.Cols.FIRST_NAME, crime.getFirstName());
+        values.put(CrimeTable.Cols.LAST_NAME, crime.getLastName());
+        values.put(CrimeTable.Cols.NUMBER, crime.getNumber().toString());
+        values.put(CrimeTable.Cols.POSITIONS, crime.getPositions());
+        values.put(CrimeTable.Cols.LAST_UPDATE, crime.getLastUpdate().toString());
+        values.put(CrimeTable.Cols.ISCATCHER, crime.isCatcher()?1:0);
+        values.put(CrimeTable.Cols.ISPITCHER, crime.isPitcher()?1:0);
+        values.put(CrimeTable.Cols.ISINFIELD, crime.isInfield()?1:0);
+        values.put(CrimeTable.Cols.ISOUTFIELD, crime.isOutfield()?1:0);
 
         return values;
     }
@@ -75,19 +79,41 @@ public class Roster {
     public List<Player> getCrimes() {
         List<Player> crimes = new ArrayList<>();
 
-//        CrimeCursorWrapper cursor = queryCrimes(null, null);
+        CrimeCursorWrapper cursor = queryCrimes(null, null);
 
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            crimes.add(cursor.getCrime());
-//            cursor.moveToNext();
-//        }
-//        cursor.close();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            crimes.add(cursor.getPlayer());
+            cursor.moveToNext();
+        }
+        cursor.close();
 
         return crimes;
     }
     public void addCrime(Player c) {
         ContentValues values = getContentValues(c);
-        mDatabase.insert(CrimeSchema.CrimeTable.Cols.FIRST_NAME, null, values);
+        mDatabase.insert(CrimeTable.NAME, null, values);
     }
+    public void updateCrime(Player crime) {
+        String uuidString = crime.getId().toString();
+        ContentValues values = getContentValues(crime);
+
+        mDatabase.update(CrimeTable.NAME, values,
+                CrimeTable.Cols.UUID + " = ?",
+                new String[] { uuidString });
+    }
+    private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(
+                CrimeTable.NAME,
+                null, // Columns - null selects all columns
+                whereClause,
+                whereArgs,
+                null, // groupBy
+                null, // having
+                null  // orderBy
+        );
+
+        return new CrimeCursorWrapper(cursor);
+    }
+
 }

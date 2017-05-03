@@ -45,7 +45,13 @@ public class PlayerFragment extends Fragment {
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = Roster.get(getActivity()).getCrime(crimeId);
     }
+    @Override
+    public void onPause() {
+        super.onPause();
 
+        Roster.get(getActivity())
+                .updateCrime(mCrime);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);

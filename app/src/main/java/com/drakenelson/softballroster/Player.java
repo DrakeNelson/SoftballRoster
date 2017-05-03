@@ -119,7 +119,18 @@ public class Player {
         setPositions();
     }
 
-
+    public Player(UUID id) {
+        this.id = id;
+        setLastUpdate();
+        setLastName("");
+        setFirstName("");
+        setNumber(99);
+        setPitcher(false);
+        setCatcher(false);
+        setInfield(false);
+        setOutField(false);
+        setPositions();
+    }
 
     public Player() {
         setId();
@@ -130,7 +141,7 @@ public class Player {
         setPitcher(false);
         setCatcher(false);
         setInfield(false);
-        setOutField(true);
+        setOutField(false);
         setPositions();
     }
 
