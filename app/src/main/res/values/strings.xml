@@ -9,7 +9,7 @@
     <string name="new_crime">New Crime</string>
     <string name="show_subtitle">Show Subs</string>
     <string name="hide_subtitle">Hide Subs</string>
-    <string name="subtitle_format">%1$s crimes</string>
+    <string name="subtitle_format">%1$s players</string>
     <string name="symbol_pitcher">Pitcher</string>
     <string name="player">Player</string>
     <string name="first_name">First Name</string>
