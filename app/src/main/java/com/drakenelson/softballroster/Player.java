@@ -9,9 +9,6 @@ import java.util.UUID;
 
 public class Player {
 
-    private UUID id;
-    private String firstName;
-
     public String getFirstName() {
         return firstName;
     }
@@ -20,12 +17,16 @@ public class Player {
         return lastName;
     }
 
-    private String lastName;
-    private String number;
-    private String positions;
-    private Date lastUpdate;
+    private UUID    id;
+    private String  firstName;
+    private String  lastName;
+    private String  number;
+    private String  positions;
+    private Date    lastUpdate;
     private boolean isPitcher;
     private boolean isCatcher;
+    private boolean isInfield;
+    private boolean isOutfield;
 
     public UUID getId() {
         return id;
@@ -118,8 +119,7 @@ public class Player {
         setPositions();
     }
 
-    private boolean isInfield;
-    private boolean isOutfield;
+
 
     public Player() {
         setId();

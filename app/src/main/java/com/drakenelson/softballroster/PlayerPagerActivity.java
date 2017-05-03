@@ -16,7 +16,7 @@ import java.util.UUID;
  * Created by user on 4/10/2017.
  */
 
-public class PlayerPager extends AppCompatActivity {
+public class PlayerPagerActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private List<Player> mCrimes;
 
@@ -54,7 +54,7 @@ public class PlayerPager extends AppCompatActivity {
     private static final String EXTRA_CRIME_ID = "com.drakenelson.criminalintentnotes.crime_id";
 
     static Intent newIntent(Context packageContext, UUID crimeId) {
-        Intent intent = new Intent(packageContext, PlayerPager.class);
+        Intent intent = new Intent(packageContext, PlayerPagerActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
         return intent;
     }

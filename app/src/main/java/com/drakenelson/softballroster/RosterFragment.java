@@ -89,7 +89,7 @@ public class RosterFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = PlayerPager.newIntent(getActivity(), mCrime.getId());
+            Intent intent = PlayerPagerActivity.newIntent(getActivity(), mCrime.getId());
             startActivity(intent);
         }
     }

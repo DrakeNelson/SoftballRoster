@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".PlayerPager">
+        <activity android:name=".PlayerPagerActivity">
 
             <!--take out the old launcher<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
