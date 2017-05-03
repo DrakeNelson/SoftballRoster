@@ -4,7 +4,7 @@ package com.drakenelson.softballroster.Database;
  * Created by user on 4/24/2017.
  */
 
-public class CrimeSchema {
+public class PlayerSchema {
     public static final class CrimeTable {
         public static final String NAME = "crimes";
 

@@ -5,9 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.drakenelson.softballroster.Database.CrimeBaseHelper;
-import com.drakenelson.softballroster.Database.CrimeCursorWrapper;
-import com.drakenelson.softballroster.Database.CrimeSchema.CrimeTable;
+import com.drakenelson.softballroster.Database.PlayerBaseHelper;
+import com.drakenelson.softballroster.Database.PlayerCursorWrapper;
+import com.drakenelson.softballroster.Database.PlayerSchema.CrimeTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Roster {
 
     private Roster(Context context) {
         mContext = context.getApplicationContext();
-        mDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
+        mDatabase = new PlayerBaseHelper(mContext).getWritableDatabase();
 
 
     }
@@ -43,7 +43,7 @@ public class Roster {
     }
 
     public Player getCrime(UUID id) {
-        CrimeCursorWrapper cursor = queryCrimes(
+        PlayerCursorWrapper cursor = queryCrimes(
                 CrimeTable.Cols.UUID + " = ?",
                 new String[] { id.toString() }
         );
@@ -79,7 +79,7 @@ public class Roster {
     public List<Player> getCrimes() {
         List<Player> crimes = new ArrayList<>();
 
-        CrimeCursorWrapper cursor = queryCrimes(null, null);
+        PlayerCursorWrapper cursor = queryCrimes(null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -102,7 +102,7 @@ public class Roster {
                 CrimeTable.Cols.UUID + " = ?",
                 new String[] { uuidString });
     }
-    private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
+    private PlayerCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 CrimeTable.NAME,
                 null, // Columns - null selects all columns
@@ -113,7 +113,7 @@ public class Roster {
                 null  // orderBy
         );
 
-        return new CrimeCursorWrapper(cursor);
+        return new PlayerCursorWrapper(cursor);
     }
 
 }
